@@ -11,7 +11,7 @@ void main(){
 Future<String> httpGet( String url ){
   return Future.delayed( const Duration(seconds: 1), () {
     throw 'error en la peticion http';
-    // return 'respuesta de la peticion http';
+    // return 'respuesta de la peticiosn http';
   });
 }
 
