@@ -1,17 +1,15 @@
 void main(){
-  print('inicio del programa');
-  httpGet('https-jose-almonte.com/cursos').then((value) {
-    print(value);
-  }).catchError( (err) {
-    print('Error: $err');
+  emitNumbers().listen( (value){
+    print('Stream value: $value');
   });
-  print('fin del programa');
+
 }
 
-Future<String> httpGet( String url ){
-  return Future.delayed( const Duration(seconds: 1), () {
-    throw 'error en la peticion http';
-    // return 'respuesta de la peticion http';
-  });
+Stream<int> emitNumbers(){
+  return Stream.periodic( const Duration(seconds: 1), (value) {
+    // print('Desde periodic $value');
+    return value;
+  }).take(5);
+
 }
 
