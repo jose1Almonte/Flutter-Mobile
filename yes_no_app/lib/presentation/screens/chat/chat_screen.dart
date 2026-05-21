@@ -38,11 +38,12 @@ class _ChatView extends StatelessWidget {
           children: [
             Expanded(
               child: ListView.builder(
+                controller: chatProvider.chatScrollController,
                 itemCount: chatProvider.messageList.length,
                 itemBuilder: (context, index) {
                   final message = chatProvider.messageList[index];
                   return (message.fromWho == FromWho.hers)
-                  ? HerMessageBubble()
+                  ? HerMessageBubble(message: message,)
                   : MyMessageBubble(message: message,); 
               },)
             ),
