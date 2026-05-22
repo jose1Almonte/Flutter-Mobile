@@ -9,6 +9,7 @@ class ChatProvider extends ChangeNotifier{
   List<Message> messageList = [];
 
   Future<void> sendMessage( String text ) async{
+    text = text.trimRight();
 
     if (text.isEmpty) return;
 
