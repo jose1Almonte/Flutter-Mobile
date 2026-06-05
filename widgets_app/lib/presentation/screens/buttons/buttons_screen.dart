@@ -121,7 +121,6 @@ class _ButtonsView extends StatelessWidget {
 class CustomButton extends StatelessWidget {
   const CustomButton({super.key});
 
-
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
