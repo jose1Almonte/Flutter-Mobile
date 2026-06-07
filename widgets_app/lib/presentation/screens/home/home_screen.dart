@@ -26,7 +26,7 @@ class _HomeView extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListView.builder(
       physics: BouncingScrollPhysics(),
-      itemCount: 2,
+      itemCount: appMenuItems.length,
       itemBuilder: (context, index) {
         final menuItem = appMenuItems[index];
         return _CustomListTile(menuItem: menuItem);
