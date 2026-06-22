@@ -12,6 +12,12 @@ final isDarkModeProvider = StateProvider<bool>((ref) => false,);
 // Un simple int
 final selectedColorProvider = StateProvider<int>((ref) => 0,);
 
+
+
+
+
+
+
 // un objeto de tipo AppTheme (custom)
 final themeNotifierProvider = StateNotifierProvider<ThemeNotifier, AppTheme>(
   (ref) => ThemeNotifier(),
@@ -23,5 +29,13 @@ class ThemeNotifier extends StateNotifier<AppTheme> {
   
   ThemeNotifier(): super(AppTheme());
   // ThemeNotifier(super.state);
+
+  void toggleDarkMode(){
+    state = state.copyWith(isDarkMode: !state.isDarkMode);
+  }
+
+  void changeColorIndex(int colorIndex){
+    state = state.copyWith(selectedColor: colorIndex);
+  }
 
 }
