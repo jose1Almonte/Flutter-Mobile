@@ -2,6 +2,7 @@ import 'package:animate_do/animate_do.dart';
 import 'package:cinemapedia/config/helpers/human_format.dart';
 import 'package:cinemapedia/domain/entities/movie.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class MovieHorizontalListview extends StatefulWidget {
   final List<Movie> movies;
@@ -18,11 +19,11 @@ class MovieHorizontalListview extends StatefulWidget {
   });
 
   @override
-  State<MovieHorizontalListview> createState() => _MovieHorizontalListviewState();
+  State<MovieHorizontalListview> createState() =>
+      _MovieHorizontalListviewState();
 }
 
 class _MovieHorizontalListviewState extends State<MovieHorizontalListview> {
-  
   final scrollController = ScrollController();
 
   @override
@@ -31,11 +32,11 @@ class _MovieHorizontalListviewState extends State<MovieHorizontalListview> {
     scrollController.addListener(() {
       if (widget.loadNextPage == null) return;
 
-      if ( scrollController.position.pixels + 200 >= scrollController.position.maxScrollExtent ){
+      if (scrollController.position.pixels + 200 >=
+          scrollController.position.maxScrollExtent) {
         widget.loadNextPage!();
       }
-
-    },);
+    });
   }
 
   @override
@@ -43,7 +44,7 @@ class _MovieHorizontalListviewState extends State<MovieHorizontalListview> {
     scrollController.dispose();
     super.dispose();
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -99,7 +100,10 @@ class _Slide extends StatelessWidget {
                       child: const CircularProgressIndicator(strokeWidth: 2),
                     );
                   }
-                  return FadeIn(child: child);
+                  return GestureDetector(
+                    onTap: () => context.go('/movie/${movie.id}'),
+                    child: FadeIn(child: child),
+                  );
                 },
               ),
             ),
@@ -118,17 +122,20 @@ class _Slide extends StatelessWidget {
             child: Row(
               children: [
                 Icon(Icons.star_half_outlined, color: Colors.yellow.shade800),
-                SizedBox(width: 3,),
+                SizedBox(width: 3),
                 Text(
                   '${movie.voteAverage}',
                   style: textStyles.bodyMedium?.copyWith(
                     color: Colors.yellow.shade800,
                   ),
                 ),
-                SizedBox(width: 10,),
+                SizedBox(width: 10),
                 const Spacer(),
                 // Text('${movie.popularity}',style: textStyles.bodySmall,),
-                Text(HumanFormats.number(movie.popularity),style: textStyles.bodySmall,),
+                Text(
+                  HumanFormats.number(movie.popularity),
+                  style: textStyles.bodySmall,
+                ),
               ],
             ),
           ),

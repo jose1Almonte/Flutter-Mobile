@@ -1,3 +1,4 @@
+import 'package:cinemapedia/config/helpers/custom_scroll_behavior.dart';
 import 'package:flutter/material.dart';
 
 import 'package:cinemapedia/config/router/app_router.dart';
@@ -23,6 +24,7 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
     return MaterialApp.router(
+      scrollBehavior: CustomScrollBehavior(),
       routerConfig: appRouter,
       debugShowCheckedModeBanner: false,
       theme: AppTheme().getTheme(),
