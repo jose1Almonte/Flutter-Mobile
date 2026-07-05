@@ -1,4 +1,6 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:cinemapedia/domain/entities/movie.dart';
+import 'package:cinemapedia/presentation/providers/providers.dart';
 import 'package:flutter/material.dart';
 
 class MovieHorizontalListview extends StatelessWidget {
@@ -23,6 +25,80 @@ class MovieHorizontalListview extends StatelessWidget {
         children: [
           if (title != null || subtitle != null)
             _Title(title: title, subtitle: subtitle),
+
+          Expanded(
+            child: ListView.builder(
+              itemCount: movies.length,
+              scrollDirection: Axis.horizontal,
+              physics: const BouncingScrollPhysics(),
+              itemBuilder: (context, index) {
+                return _Slide(movie: movies[index]);
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _Slide extends StatelessWidget {
+  final Movie movie;
+
+  const _Slide({required this.movie});
+
+  @override
+  Widget build(BuildContext context) {
+    final textStyles = Theme.of(context).textTheme;
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          //* Imagen
+          SizedBox(
+            // height: 230,
+            width: 150,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(20),
+              child: Image.network(
+                movie.posterPath,
+                fit: BoxFit.cover,
+                width: 150,
+                loadingBuilder: (context, child, loadingProgress) {
+                  if (loadingProgress != null) {
+                    return Center(
+                      child: const CircularProgressIndicator(strokeWidth: 2),
+                    );
+                  }
+                  return FadeIn(child: child);
+                },
+              ),
+            ),
+          ),
+
+          const SizedBox(height: 5),
+
+          //*Title
+          SizedBox(
+            width: 150,
+            child: Text(movie.title, maxLines: 2, style: textStyles.titleSmall),
+          ),
+
+          Row(
+            children: [
+              Icon(Icons.star_half_outlined, color: Colors.yellow.shade800),
+              SizedBox(width: 3,),
+              Text(
+                '${movie.voteAverage}',
+                style: textStyles.bodyMedium?.copyWith(
+                  color: Colors.yellow.shade800,
+                ),
+              ),
+              SizedBox(width: 10,),
+              Text('${movie.popularity}',style: textStyles.bodySmall,),
+            ],
+          ),
         ],
       ),
     );
@@ -41,7 +117,7 @@ class _Title extends StatelessWidget {
     final subtitleStyle = Theme.of(context).textTheme.titleMedium;
 
     return Container(
-      padding: const EdgeInsets.only( top: 10 ),
+      padding: const EdgeInsets.only(top: 10),
       margin: EdgeInsets.symmetric(horizontal: 10),
       child: Row(
         children: [
