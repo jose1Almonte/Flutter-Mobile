@@ -26,6 +26,7 @@ class MoviedbDatasource extends MoviesDatasource {
         'page':page
       },
     );
+    print('CURRENT PAGE: ${page} ');
 
     final movieDBResponse = MovieDbResponse.fromJson(response.data);
 
