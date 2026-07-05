@@ -49,76 +49,73 @@ class _HomeViewState extends ConsumerState<_HomeView> {
     final upcomingMovies = ref.watch(upcomingMoviesProvider);
     final topRatedMovies = ref.watch(topRatedMoviesProvider);
 
-    return Visibility(
-      visible: !initialLoading,
-      child: CustomScrollView(
-        slivers: [
-          SliverAppBar(
-            floating: true,
-            flexibleSpace: FlexibleSpaceBar(
-              title: CustomAppbar(),
-              titlePadding: EdgeInsets.all(0),
-              // centerTitle: false,
-            ),
+    return CustomScrollView(
+      slivers: [
+        SliverAppBar(
+          floating: true,
+          flexibleSpace: FlexibleSpaceBar(
+            title: CustomAppbar(),
+            titlePadding: EdgeInsets.all(0),
+            // centerTitle: false,
           ),
-          SliverList(
-            delegate: SliverChildBuilderDelegate((context, index) {
-              return Column(
-                children: [
-                  // const CustomAppbar(),
-                  MoviesSlideshow(movies: slideshowMovies),
-                  MovieHorizontalListview(
-                    movies: nowPlayingMovies,
-                    title: 'En cines',
-                    subtitle: 'Lunes 20',
-                    loadNextPage: () {
-                      ref.read(nowPlayingMoviesProvider.notifier).loadNextPage();
-                    },
-                  ),
-                  MovieHorizontalListview(
-                    movies: upcomingMovies,
-                    title: 'Próximamente',
-                    subtitle: 'En este mes',
-                    loadNextPage: () {
-                      ref.read(upcomingMoviesProvider.notifier).loadNextPage();
-                    },
-                  ),
-                  MovieHorizontalListview(
-                    movies: popularMovies,
-                    title: 'Populares',
-                    // subtitle: 'De todos los tiempos',
-                    loadNextPage: () {
-                      ref.read(popularMoviesProvider.notifier).loadNextPage();
-                    },
-                  ),
-                  MovieHorizontalListview(
-                    movies: topRatedMovies,
-                    title: 'Mejor calificadas',
-                    subtitle: 'Desde siempre',
-                    loadNextPage: () {
-                      ref.read(topRatedMoviesProvider.notifier).loadNextPage();
-                    },
-                  ),
-      
-                  SizedBox(height: 10),
-      
-                  // Expanded(
-                  //   child: ListView.builder(
-                  //     itemCount: nowPlayingMovies.length,
-                  //     itemBuilder: (context, index) {
-                  //       final movie = nowPlayingMovies[index];
-                  //       return ListTile(
-                  //         title: Text(movie.title),
-                  //       );
-                  //     },
-                  //   ),
-                  // ),
-                ],
-              );
-            }, childCount: 1),
-          ),
-        ],
-      ),
+        ),
+        SliverList(
+          delegate: SliverChildBuilderDelegate((context, index) {
+            return Column(
+              children: [
+                // const CustomAppbar(),
+                MoviesSlideshow(movies: slideshowMovies),
+                MovieHorizontalListview(
+                  movies: nowPlayingMovies,
+                  title: 'En cines',
+                  subtitle: 'Lunes 20',
+                  loadNextPage: () {
+                    ref.read(nowPlayingMoviesProvider.notifier).loadNextPage();
+                  },
+                ),
+                MovieHorizontalListview(
+                  movies: upcomingMovies,
+                  title: 'Próximamente',
+                  subtitle: 'En este mes',
+                  loadNextPage: () {
+                    ref.read(upcomingMoviesProvider.notifier).loadNextPage();
+                  },
+                ),
+                MovieHorizontalListview(
+                  movies: popularMovies,
+                  title: 'Populares',
+                  // subtitle: 'De todos los tiempos',
+                  loadNextPage: () {
+                    ref.read(popularMoviesProvider.notifier).loadNextPage();
+                  },
+                ),
+                MovieHorizontalListview(
+                  movies: topRatedMovies,
+                  title: 'Mejor calificadas',
+                  subtitle: 'Desde siempre',
+                  loadNextPage: () {
+                    ref.read(topRatedMoviesProvider.notifier).loadNextPage();
+                  },
+                ),
+    
+                SizedBox(height: 10),
+    
+                // Expanded(
+                //   child: ListView.builder(
+                //     itemCount: nowPlayingMovies.length,
+                //     itemBuilder: (context, index) {
+                //       final movie = nowPlayingMovies[index];
+                //       return ListTile(
+                //         title: Text(movie.title),
+                //       );
+                //     },
+                //   ),
+                // ),
+              ],
+            );
+          }, childCount: 1),
+        ),
+      ],
     );
   }
 }
