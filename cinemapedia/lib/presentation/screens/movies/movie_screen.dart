@@ -1,5 +1,5 @@
 import 'package:cinemapedia/domain/entities/movie.dart';
-import 'package:cinemapedia/presentation/providers/movies/movie_info_provider.dart';
+import 'package:cinemapedia/presentation/providers/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -20,6 +20,7 @@ class MovieScreenState extends ConsumerState<MovieScreen> {
     super.initState();
 
     ref.read(movieInfoProvider.notifier).loadMovie(widget.movieId);
+    ref.read(actorsByMovieProvider.notifier).loadActors(widget.movieId);
   }
 
   @override
@@ -52,7 +53,7 @@ class MovieScreenState extends ConsumerState<MovieScreen> {
 class _MovieDetails extends StatelessWidget {
   final Movie movie;
 
-  const _MovieDetails({super.key, required this.movie});
+  const _MovieDetails({required this.movie});
 
   @override
   Widget build(BuildContext context) {
@@ -69,24 +70,50 @@ class _MovieDetails extends StatelessWidget {
               ClipRRect(
                 borderRadius: BorderRadiusGeometry.circular(20),
                 child: Image.network(movie.posterPath, width: size.width * 0.3),
-
               ),
 
-              SizedBox(width: 10,),
+              SizedBox(width: 10),
 
               //Descripcion
-
-              SizedBox(width: (size.width-40)*0.7,
-              child: Column(
-                children: [
-                  Text(movie.title, style: textStyles.titleLarge,),
-                  Text(movie.overview != '' ? movie.overview : 'sin descripción', style: textStyles.bodySmall,),
-                ],
-              ),),
-
+              SizedBox(
+                width: (size.width - 40) * 0.7,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(movie.title, style: textStyles.titleLarge),
+                    Text(
+                      movie.overview != '' ? movie.overview : 'sin descripción',
+                      style: textStyles.bodySmall,
+                    ),
+                  ],
+                ),
+              ),
             ],
           ),
         ),
+
+        // Generos de la pelicula
+        Padding(
+          padding: EdgeInsets.all(8),
+          child: Wrap(
+            children: [
+              ...movie.genreIds.map(
+                (gender) => Container(
+                  margin: EdgeInsets.only(right: 10),
+                  child: Chip(
+                    label: Text(gender),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+
+        //TODO: Mostrar actores ListView
+        SizedBox(height: 100),
       ],
     );
   }
