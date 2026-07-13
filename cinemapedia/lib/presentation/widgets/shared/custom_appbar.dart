@@ -30,16 +30,17 @@ class CustomAppbar extends ConsumerWidget {
                   final searchedMovies = ref.read(searchedMoviesProvider);
                   final searchQuery = ref.read(searchQueryProvider);
 
-                  showSearch<Movie?>(
+                  final movie = await showSearch<Movie?>(
                     query: searchQuery,
                     context: context,
                     delegate: SearchMovieDelegate(
                       searchMovies: ref.read( searchedMoviesProvider.notifier ).searchMoviesByQuery, initialMovies: searchedMovies,
                     ),
-                  ).then((movie) {
-                    if (movie == null) return;
-                    context.push('/movie/${movie.id}');
-                  },);
+                  );
+
+                  if (!context.mounted) return;
+                  if (movie == null) return;
+                  context.push('/movie/${movie.id}');
 
                   // print('${movie?.id}**************************************************************************************************************************************************************************************************************************');
                 },
