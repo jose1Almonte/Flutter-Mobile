@@ -9,11 +9,12 @@ typedef SearchMoviesCallback = Future<List<Movie>> Function(String query);
 
 class SearchMovieDelegate extends SearchDelegate<Movie?> {
   final SearchMoviesCallback searchMovies;
-  final List<Movie> initialMovies;
+  List<Movie> initialMovies;
   
   StreamController<List<Movie>> debouncedMovies = StreamController.broadcast();
-  Timer? _debounceTimer;
+  StreamController<bool> isLoadingStream = StreamController.broadcast();
 
+  Timer? _debounceTimer;
   SearchMovieDelegate({
     super.searchFieldLabel,
     super.searchFieldStyle,
@@ -27,19 +28,21 @@ class SearchMovieDelegate extends SearchDelegate<Movie?> {
   });
 
   void clearStreams() {
+    _debounceTimer?.cancel();
     debouncedMovies.close();
   }
 
   void _onQueryChanged(String query) {
+    isLoadingStream.add(true);
     if (_debounceTimer?.isActive ?? false) _debounceTimer!.cancel();
 
     _debounceTimer = Timer(Duration(milliseconds: 500), () async {
-      // if (query.isEmpty) {
-      //   debouncedMovies.add([]);
-      //   return;
-      // }
+      if (debouncedMovies.isClosed) return isLoadingStream.add(false);
       final movies = await searchMovies(query);
+      if (debouncedMovies.isClosed) return isLoadingStream.add(false);
+      initialMovies = movies;
       debouncedMovies.add(movies);
+      isLoadingStream.add(false);
     });
   }
 
@@ -49,11 +52,25 @@ class SearchMovieDelegate extends SearchDelegate<Movie?> {
   @override
   List<Widget>? buildActions(BuildContext context) {
     return [
-      // if (query.isNotEmpty)
-      FadeIn(
-        animate: query.isNotEmpty,
-        child: IconButton(onPressed: () => query = '', icon: Icon(Icons.clear)),
+
+      StreamBuilder(
+        stream: isLoadingStream.stream, 
+        builder: (context, snapshot) {
+          final bool isLoadingQuery = snapshot.data ?? false;
+          return (isLoadingQuery)
+            ? SpinPerfect(
+              duration: Duration(seconds: 20),
+              spins: 10,
+              infinite: true,
+              child: IconButton(onPressed: () => query = '', icon: Icon(Icons.refresh_rounded)),
+            )
+            : FadeIn(
+              animate: query.isNotEmpty,
+              child: IconButton(onPressed: () => query = '', icon: Icon(Icons.clear)),
+            );
+        },
       ),
+      // if (query.isNotEmpty)
     ];
   }
 
@@ -70,39 +87,43 @@ class SearchMovieDelegate extends SearchDelegate<Movie?> {
 
   @override
   Widget buildResults(BuildContext context) {
-    return const Text('buildResults');
+    return buildResultsAndSuggestions();
   }
 
   @override
   Widget buildSuggestions(BuildContext context) {
     _onQueryChanged(query);
 
-    return StreamBuilder(
-      // future: searchMovies(query),
-      initialData: initialMovies,
-      stream: debouncedMovies.stream,
-      builder: (context, snapshot) {
-        //! MUCHAS PETICIONES A LA API
-        final movies = snapshot.data ?? [];
+    return buildResultsAndSuggestions();
+  }
 
-        return ListView.builder(
-          itemCount: movies.length,
-          itemBuilder: (context, index) {
-            return _MovieItem(
-              movie: movies[index],
-              onMovieSelected: (context, movie) {
-                clearStreams();
-                close(context, movie);
-              },
-            );
-            // final movie = movies[index];
-            // return ListTile(
-            //   title: Text(movie.title),
-            // );
-          },
-        );
-      },
-    );
+  StreamBuilder<List<Movie>> buildResultsAndSuggestions() {
+    return StreamBuilder(
+    // future: searchMovies(query),
+    initialData: initialMovies,
+    stream: debouncedMovies.stream,
+    builder: (context, snapshot) {
+      //! MUCHAS PETICIONES A LA API
+      final movies = snapshot.data ?? [];
+
+      return ListView.builder(
+        itemCount: movies.length,
+        itemBuilder: (context, index) {
+          return _MovieItem(
+            movie: movies[index],
+            onMovieSelected: (context, movie) {
+              clearStreams();
+              close(context, movie);
+            },
+          );
+          // final movie = movies[index];
+          // return ListTile(
+          //   title: Text(movie.title),
+          // );
+        },
+      );
+    },
+  );
   }
 }
 
