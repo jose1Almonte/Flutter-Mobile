@@ -40,7 +40,7 @@ class CustomAppbar extends ConsumerWidget {
 
                   if (!context.mounted) return;
                   if (movie == null) return;
-                  context.push('/movie/${movie.id}');
+                  context.push('/home/0/movie/${movie.id}');
 
                   // print('${movie?.id}**************************************************************************************************************************************************************************************************************************');
                 },
