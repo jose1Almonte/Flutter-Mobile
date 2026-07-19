@@ -8,7 +8,7 @@ class CustomBottomNavigation extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    void onItemSelected(int index){
+    void onItemTapped(int index){
       switch(index) {
         case 0:
           context.go('/home/0');
@@ -23,7 +23,7 @@ class CustomBottomNavigation extends StatelessWidget {
     }
     return BottomNavigationBar(
       elevation: 0,
-      onTap: (value) => onItemSelected(value),
+      onTap: (value) => onItemTapped(value),
       currentIndex: currentIndex,
       items: const [
         BottomNavigationBarItem(
