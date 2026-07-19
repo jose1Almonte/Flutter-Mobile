@@ -6,19 +6,19 @@ class CustomBottomNavigation extends StatelessWidget {
   
   const CustomBottomNavigation({super.key, required this.currentChild});
 
-  void onItemTap(BuildContext context, int index){
-    switch(index){
-      case 0:
-        context.go('/');
-        return;
-      case 1:
-        context.go('/');
-        return;
-      case 2:
-        context.go('/favorites');
-        return;
-    }
-  }
+  // void onItemTap(BuildContext context, int index){
+  //   switch(index){
+  //     case 0:
+  //       context.go('/');
+  //       return;
+  //     case 1:
+  //       context.go('/');
+  //       return;
+  //     case 2:
+  //       context.go('/favorites');
+  //       return;
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
