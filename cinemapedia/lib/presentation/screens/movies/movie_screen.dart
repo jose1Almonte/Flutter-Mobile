@@ -199,6 +199,16 @@ class _CustomSliverAppBar extends StatelessWidget {
       expandedHeight: size.height * 0.7,
       foregroundColor: Colors.white,
       // centerTitle: true,
+      actions: [
+        IconButton(
+          onPressed: () {
+            //TODO: IMPLEMENTAR
+          },
+          // icon: Icon(Icons.favorite_outline),
+          icon: Icon(Icons.favorite, color: Colors.red),
+        ),
+      ],
+
       flexibleSpace: FlexibleSpaceBar(
         // centerTitle: true,
         titlePadding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
@@ -213,37 +223,70 @@ class _CustomSliverAppBar extends StatelessWidget {
         background: Stack(
           children: [
             SizedBox.expand(
-              child: Image.network(movie.posterPath, fit: BoxFit.cover, loadingBuilder: (context, child, loadingProgress) {
-                if (loadingProgress != null) return SizedBox();
-                return FadeIn(child: child);
-              },),
+              child: Image.network(
+                movie.posterPath,
+                fit: BoxFit.cover,
+                loadingBuilder: (context, child, loadingProgress) {
+                  if (loadingProgress != null) return SizedBox();
+                  return FadeIn(child: child);
+                },
+              ),
             ),
 
-            const SizedBox.expand(
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: AlignmentGeometry.topCenter,
-                    end: Alignment.bottomCenter,
-                    stops: [0.7, 1.0],
-                    colors: [Colors.transparent, Colors.black87],
-                  ),
-                ),
-              ),
+            // Sombra al pie del poster
+            _CustomGradient(
+              begin: AlignmentGeometry.topCenter,
+              end: Alignment.bottomCenter,
+              stops: [0.8, 1.0],
+              colors: [Colors.transparent, Colors.black38],
             ),
-            const SizedBox.expand(
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: AlignmentGeometry.topLeft,
-                    // end: Alignment.bottomCenter,
-                    stops: [0.0, 0.3],
-                    colors: [Colors.black87, Colors.transparent],
-                  ),
-                ),
-              ),
+
+            // Sombra del boton de retorno
+            _CustomGradient(
+              begin: AlignmentGeometry.topLeft,
+              // end: Alignment.bottomLeft,
+              stops: [0.0, 0.3],
+              colors: [Colors.black87, Colors.transparent],
+            ),
+
+            // Sombra del boton de favoritos
+            _CustomGradient(
+              begin: AlignmentGeometry.topRight,
+              end: Alignment.bottomLeft,
+              stops: [0.0, 0.3],
+              colors: [Colors.black87, Colors.transparent],
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class _CustomGradient extends StatelessWidget {
+  final AlignmentGeometry begin;
+  final AlignmentGeometry end;
+  final List<double>? stops;
+  final List<Color> colors;
+
+  const _CustomGradient({
+    this.begin = AlignmentGeometry.centerLeft,
+    this.end = AlignmentGeometry.centerRight,
+    this.stops,
+    required this.colors,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox.expand(
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: begin,
+            end: end,
+            stops: stops,
+            colors: colors,
+          ),
         ),
       ),
     );
