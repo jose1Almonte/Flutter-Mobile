@@ -1,3 +1,4 @@
+import 'package:cinemapedia/config/database/database.dart';
 import 'package:cinemapedia/config/helpers/custom_scroll_behavior.dart';
 import 'package:flutter/material.dart';
 
@@ -7,18 +8,35 @@ import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-
 Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
 
-  await dotenv.load();
+  // await db
+  //     .into(db.favoriteMovies)
+  //     .insert(
+  //       FavoriteMoviesCompanion.insert(
+  //         movieId: 1,
+  //         backdropPath: 'backdropPath.png',
+  //         originalTitle: 'my first movie',
+  //         posterPath: 'posterPath.png',
+  //         title: 'Mi primera pelicula',
+  //       ),
+  //     );
+
+  // final deleteQuery = db.delete(db.favoriteMovies);
+  // await deleteQuery.go();
+
+  // final movies = await db.select(db.favoriteMovies).get();
+
+  // print('movies: $movies');
   
-  runApp(
-    const ProviderScope(child: MainApp(),)
-  );
+  await dotenv.load();
+
+  runApp(const ProviderScope(child: MainApp()));
 }
 
 class MainApp extends StatelessWidget {
-  const MainApp({super.key}); 
+  const MainApp({super.key});
 
   @override
   Widget build(BuildContext context) {
