@@ -1,4 +1,4 @@
-import 'package:cinemapedia/config/database/database.dart';
+// import 'package:cinemapedia/config/database/database.dart';
 import 'package:cinemapedia/config/helpers/custom_scroll_behavior.dart';
 import 'package:flutter/material.dart';
 
